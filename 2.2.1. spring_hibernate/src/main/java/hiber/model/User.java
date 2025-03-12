@@ -19,8 +19,8 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "car_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 
     public User() {
@@ -65,7 +65,7 @@ public class User {
         this.email = email;
     }
 
-    public Car getCar() {
-        return car;
-    }
+    public void setCar(Car car) { this.car = car; }
+
+    public Car getCar() { return car; }
 }
