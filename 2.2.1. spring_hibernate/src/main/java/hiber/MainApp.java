@@ -35,6 +35,15 @@ public class MainApp {
             System.out.println();
         }
 
+        String model = "Car";
+        int series = 2;
+
+        User user = userService.getUserByCar(model, series);
+
+        System.out.println(user != null
+                ? "User found: " + user.getFirstName() + " " + user.getLastName()
+                : "User not found for car: " + model + " " + series);
+
         context.close();
     }
 }
