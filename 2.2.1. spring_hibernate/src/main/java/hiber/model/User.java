@@ -68,4 +68,13 @@ public class User {
     public void setCar(Car car) { this.car = car; }
 
     public Car getCar() { return car; }
+
+    @Override
+    public String toString() {
+        return "Id = " + id + "\n"
+                + "First Name = " + firstName + "\n"
+                + "Last Name = " + lastName + "\n"
+                + "Email = " + email + "\n"
+                + "Car = " + car.getModel() + " " + car.getSeries() + "\n";
+    }
 }

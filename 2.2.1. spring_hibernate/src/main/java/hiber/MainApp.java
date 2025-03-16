@@ -8,6 +8,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class MainApp {
     public static void main(String[] args) throws SQLException {
@@ -16,23 +18,22 @@ public class MainApp {
 
         UserService userService = context.getBean(UserService.class);
 
-        userService.add(new User("User1", "Lastname1", "user1@mail.ru",
-                new Car("Car", 1)));
-        userService.add(new User("User2", "Lastname2", "user2@mail.ru",
-                new Car("Car", 2)));
-        userService.add(new User("User3", "Lastname3", "user3@mail.ru",
-                new Car("Car", 3)));
-        userService.add(new User("User4", "Lastname4", "user4@mail.ru",
-                new Car("Car", 4)));
 
-        List<User> users = userService.listUsers();
+        AtomicInteger counter = new AtomicInteger(1);
+        Stream<User> userStream = Stream
+                .generate(() -> new User("User" + counter,
+                        "Lastname" + counter,
+                        "user" + counter + "@mail.ru",
+                        new Car("Car", counter.getAndIncrement())))
+                .limit(5);
+
+        userService.addAll(userStream.toList());
+
+        List<User> users;
+
+        users = userService.listUsers();
         for (User user : users) {
-            System.out.println("Id = " + user.getId());
-            System.out.println("First Name = " + user.getFirstName());
-            System.out.println("Last Name = " + user.getLastName());
-            System.out.println("Email = " + user.getEmail());
-            System.out.println("Car = " + user.getCar().getModel() + " " + user.getCar().getSeries());
-            System.out.println();
+            System.out.println(user.toString());
         }
 
         String model = "Car";
@@ -41,9 +42,10 @@ public class MainApp {
         User user = userService.getUserByCar(model, series);
 
         System.out.println(user != null
-                ? "User found: " + user.getFirstName() + " " + user.getLastName()
-                : "User not found for car: " + model + " " + series);
+                ? "User found: " + user.getFirstName() + " " + user.getLastName() + "\n"
+                : "User not found for car: " + model + " " + series + "\n");
 
+        userService.cleanSchema();
         context.close();
     }
 }

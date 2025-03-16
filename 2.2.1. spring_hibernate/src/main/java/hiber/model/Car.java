@@ -16,6 +16,7 @@ public class Car {
     @Column(name = "series")
     private int series;
 
+    @JoinColumn
     @OneToOne(mappedBy = "car")
     private User user;
 
@@ -29,10 +30,6 @@ public class Car {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getModel() {
