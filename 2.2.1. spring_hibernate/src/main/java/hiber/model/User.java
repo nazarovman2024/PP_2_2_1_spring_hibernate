@@ -20,7 +20,7 @@ public class User {
     private String email;
 
     @OneToOne
-    @MapsId
+    @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 
     public User() {

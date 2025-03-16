@@ -20,13 +20,6 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public void addAll(List<User> users) {
-       for(User user : users) {
-          this.add(user);
-       }
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
         TypedQuery<User> query = sessionFactory
@@ -58,29 +51,5 @@ public class UserDaoImp implements UserDao {
             return null;
         }
         return users.get(0);
-    }
-
-    @Override
-    public void cleanSchema() {
-        cleanTables();
-        dropTables();
-    }
-
-    private void cleanTables() {
-        nativeQuery("ALTER TABLE users DROP FOREIGN KEY FK98xr91mc3rou6mjopt3pgq9vj");
-        nativeQuery("TRUNCATE TABLE cars");
-        nativeQuery("TRUNCATE TABLE users");
-    }
-
-    private void dropTables() {
-        nativeQuery("DROP TABLE IF EXISTS cars");
-        nativeQuery("DROP TABLE IF EXISTS users");
-    }
-
-    private void nativeQuery(String sql) {
-        sessionFactory
-                .getCurrentSession()
-                .createNativeQuery(sql)
-                .executeUpdate();
     }
 }
